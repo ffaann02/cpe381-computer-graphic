@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -36,6 +38,21 @@ def get_intersection_point(x, y, m, p):
         intersection_point.y = y_max
 
     return intersection_point
+
+def plot_clipping_window_and_line(x1, y1, x2, y2, point1_intersection, point2_intersection):
+    plt.figure()
+    plt.plot([x_min, x_max, x_max, x_min, x_min], [y_min, y_min, y_max, y_max, y_min], 'k-')  # Clipping window
+    plt.plot([x1, x2], [y1, y2], 'r--', label='Original Line')  # Original line
+    plt.plot([point1_intersection.x, point2_intersection.x], [point1_intersection.y, point2_intersection.y], 'g-', label='Clipped Line')  # Clipped line
+    plt.scatter([point1_intersection.x, point2_intersection.x], [point1_intersection.y, point2_intersection.y], color='blue')  # Intersection points
+    plt.xlim(x_min - 10, x_max + 10)
+    plt.ylim(y_min - 10, y_max + 10)
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.legend()
+    plt.title('2D Clipping')
+    plt.grid(True)
+    plt.show()
     
 while 1:
     point1 = input("Point 1: ").split()
@@ -50,7 +67,9 @@ while 1:
         m = get_m(x1, y1, x2, y2)
         print(f"Slope: {m:.2f}")
         p = get_p(m, x1, y1)
+        print("P:",p)
         point1_intersection = get_intersection_point(x1, y1, m, p)
         point2_intersection = get_intersection_point(x2, y2, m, p)
         print(f"Intersection point 1: ({point1_intersection.x:.2f}, {point1_intersection.y:.2f})")
         print(f"Intersection point 2: ({point2_intersection.x:.2f}, {point2_intersection.y:.2f})")
+        plot_clipping_window_and_line(x1, y1, x2, y2, point1_intersection, point2_intersection)
